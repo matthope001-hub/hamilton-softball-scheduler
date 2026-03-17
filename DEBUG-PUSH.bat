@@ -38,11 +38,22 @@ git init
 echo Adding files...
 git add .
 
+echo Checking if there are files to commit...
+git status
+echo.
+
 echo Committing changes...
-git commit -m "Debug commit %date% %time%"
+git commit -m "Initial commit - March Madness Bracket Tracker 2026 - %date% %time%"
+
+echo Verifying commit exists...
+git log --oneline -1
+echo.
 
 echo Setting up remote...
 git remote add origin https://github.com/matthope001-hub/march-madness-bracket-2026.git
+
+echo Setting main branch...
+git branch -M main
 
 echo Attempting push...
 git push -u origin main
