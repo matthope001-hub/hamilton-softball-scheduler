@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Deploy March Madness Bracket Tracker</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .deployment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .deployment-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .deployment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+        .platform-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .platform-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .github { background: #24292e; color: white; }
+        .netlify { background: #00c7b7; color: white; }
+        .vercel { background: #000000; color: white; }
+        .platform-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .platform-description {
+            color: #718096;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .steps {
+            margin-bottom: 1.5rem;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #4299e1;
+        }
+        .step-number {
+            background: #4299e1;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .btn {
+            background: #4299e1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+        .btn:hover {
+            background: #3182ce;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        .btn-success {
+            background: #48bb78;
+        }
+        .btn-success:hover {
+            background: #38a169;
+        }
+        .quick-deploy {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .quick-deploy h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-size: 0.9rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .feature {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            color: #4a5568;
+        }
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .warning {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #e53e3e;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #2f855a;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #48bb78;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Auto-Deploy March Madness Bracket Tracker</h1>
+            <p>Choose your deployment platform and get your bracket tracker live in minutes</p>
+        </div>
+
+        <div class="quick-deploy">
+            <h2>⚡ Quick Deploy Options</h2>
+            <p>These platforms offer one-click deployment from your GitHub repository</p>
+            
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="feature-icon">🆓</div>
+                    <strong>Free Hosting</strong>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔄</div>
+                    <strong>Auto-Updates</strong>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🌍</div>
+                    <strong>Global CDN</strong>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <strong>Analytics</strong>
+                </div>
+            </div>
+
+            <a href="#github-pages" class="btn btn-success">Deploy to GitHub Pages</a>
+            <a href="#netlify" class="btn btn-success">Deploy to Netlify</a>
+            <a href="#vercel" class="btn btn-success">Deploy to Vercel</a>
+        </div>
+
+        <div class="deployment-grid">
+            <!-- GitHub Pages -->
+            <div id="github-pages" class="deployment-card">
+                <div class="platform-header">
+                    <div class="platform-icon github">📦</div>
+                    <div class="platform-name">GitHub Pages</div>
+                </div>
+                <div class="platform-description">
+                    Free static hosting directly from your GitHub repository. Perfect for open source projects and simple deployments.
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">Push your code to a GitHub repository</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">Go to Settings → Pages in your repository</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">Select "Deploy from a branch" and choose main</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">Save and your site will be live in minutes</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    git add .<br>
+                    git commit -m "Deploy March Madness Bracket"<br>
+                    git push origin main
+                </div>
+
+                <button class="btn" onclick="window.open('https://pages.github.com/', '_blank')">Open GitHub Pages</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('github')">Copy Commands</button>
+            </div>
+
+            <!-- Netlify -->
+            <div id="netlify" class="deployment-card">
+                <div class="platform-header">
+                    <div class="platform-icon netlify">🌐</div>
+                    <div class="platform-name">Netlify</div>
+                </div>
+                <div class="platform-description">
+                    Powerful static site hosting with continuous deployment, form handling, and serverless functions.
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">Create a Netlify account (free)</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">Click "New site from Git"</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">Connect your GitHub repository</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">Deploy with default settings (build not needed)</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    # Netlify configuration (netlify.toml)<br>
+                    [build]<br>
+                    &nbsp;&nbsp;publish = "."<br>
+                    &nbsp;&nbsp;command = ""
+                </div>
+
+                <button class="btn" onclick="window.open('https://app.netlify.com/start', '_blank')">Deploy to Netlify</button>
+                <button class="btn btn-secondary" onclick="createNetlifyConfig()">Create Config</button>
+            </div>
+
+            <!-- Vercel -->
+            <div id="vercel" class="deployment-card">
+                <div class="platform-header">
+                    <div class="platform-icon vercel">▲</div>
+                    <div class="platform-name">Vercel</div>
+                </div>
+                <div class="platform-description">
+                    Modern frontend deployment with automatic HTTPS, global CDN, and instant rollbacks.
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">Sign up for Vercel (free)</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">Click "New Project" and import from Git</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">Configure framework preset (Other)</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">Deploy and get your live URL instantly</div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    # Vercel configuration (vercel.json)<br>
+                    {<br>
+                    &nbsp;&nbsp;"version": 2,<br>
+                    &nbsp;&nbsp;"builds": [<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{ "src": "**/*", "use": "@vercel/static" }<br>
+                    &nbsp;&nbsp;]<br>
+                    }
+                </div>
+
+                <button class="btn" onclick="window.open('https://vercel.com/new', '_blank')">Deploy to Vercel</button>
+                <button class="btn btn-secondary" onclick="createVercelConfig()">Create Config</button>
+            </div>
+        </div>
+
+        <div class="deployment-grid">
+            <!-- Automated Deployment -->
+            <div class="deployment-card">
+                <div class="platform-header">
+                    <div class="platform-icon" style="background: #805ad5; color: white;">🤖</div>
+                    <div class="platform-name">Automated Scripts</div>
+                </div>
+                <div class="platform-description">
+                    Set up GitHub Actions for automatic deployments whenever you push changes.
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">Create .github/workflows/deploy.yml</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">Configure deployment workflow</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">Push to GitHub to trigger deployment</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="createGitHubActions()">Setup GitHub Actions</button>
+                <button class="btn btn-secondary" onclick="window.open('index.html', '_blank')">Preview Site</button>
+            </div>
+
+            <!-- Docker Deployment -->
+            <div class="deployment-card">
+                <div class="platform-header">
+                    <div class="platform-icon" style="background: #2496ed; color: white;">🐳</div>
+                    <div class="platform-name">Docker</div>
+                </div>
+                <div class="platform-description">
+                    Containerize your application for deployment to any cloud platform.
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">Create Dockerfile</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">Build and push to registry</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">Deploy to cloud provider</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="createDockerfile()">Create Dockerfile</button>
+                <button class="btn btn-secondary" onclick="window.open('index.html', '_blank')">Preview Site</button>
+            </div>
+        </div>
+
+        <div class="success">
+            <strong>✅ Pro Tip:</strong> All these platforms offer free tiers that are perfect for your March Madness Bracket Tracker. Choose based on your preference for ease of use vs. advanced features.
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Remember to secure your Google Sheets API key and never commit it directly to your repository. Use environment variables for production deployments.
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(platform) {
+            const commands = {
+                github: `git add .\ngit commit -m "Deploy March Madness Bracket"\ngit push origin main`
+            };
+            
+            navigator.clipboard.writeText(commands[platform]).then(() => {
+                alert('Commands copied to clipboard!');
+            });
+        }
+
+        function createNetlifyConfig() {
+            const config = `[build]\n  publish = "."\n  command = ""\n\n[[redirects]]\n  from = "/*"\n  to = "/index.html"\n  status = 200`;
+            
+            downloadFile('netlify.toml', config);
+            alert('Netlify configuration file created!');
+        }
+
+        function createVercelConfig() {
+            const config = `{\n  "version": 2,\n  "builds": [\n    { "src": "**/*", "use": "@vercel/static" }\n  ],\n  "routes": [\n    { "src": "/(.*)", "dest": "/index.html" }\n  ]\n}`;
+            
+            downloadFile('vercel.json', config);
+            alert('Vercel configuration file created!');
+        }
+
+        function createGitHubActions() {
+            const workflow = `name: Deploy March Madness Bracket\n\non:\n  push:\n    branches: [ main ]\n  pull_request:\n    branches: [ main ]\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n    - uses: actions/checkout@v2\n    - name: Deploy to GitHub Pages\n      uses: peaceiris/actions-gh-pages@v3\n      with:\n        github_token: \${{ secrets.GITHUB_TOKEN }}\n        publish_dir: .`;
+            
+            downloadFile('deploy.yml', workflow);
+            alert('GitHub Actions workflow created!');
+        }
+
+        function createDockerfile() {
+            const dockerfile = `FROM nginx:alpine\nCOPY . /usr/share/nginx/html\nCOPY nginx.conf /etc/nginx/nginx.conf\nEXPOSE 80\nCMD ["nginx", "-g", "daemon off;"]`;
+            
+            downloadFile('Dockerfile', dockerfile);
+            alert('Dockerfile created!');
+        }
+
+        function downloadFile(filename, content) {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Auto-detect if user has Git and suggest next steps
+        if (navigator.userAgent.includes('Windows') || navigator.userAgent.includes('Mac') || navigator.userAgent.includes('Linux')) {
+            console.log('Desktop OS detected - Git commands available');
+        }
+    </script>
+</body>
+</html>

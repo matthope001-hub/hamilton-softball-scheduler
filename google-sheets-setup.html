@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sheets Setup - March Madness 2026</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #4299e1;
+        }
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        .step {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .step-number {
+            display: inline-block;
+            background: #4299e1;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .code {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+        .warning {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #e53e3e;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #c6f6d5;
+            color: #2f855a;
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid #48bb78;
+            margin: 1rem 0;
+        }
+        .btn {
+            background: #4299e1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #3182ce;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏀 Google Sheets Integration Setup</h1>
+        <p>Follow these steps to integrate your March Madness Bracket Tracker with Google Sheets for cloud storage and real-time collaboration.</p>
+
+        <div class="section">
+            <h2>📋 Step 1: Create Google Cloud Project</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                Create a new project or select an existing one
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                Enable the Google Sheets API
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                Enable the Google Drive API
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔑 Step 2: Create API Credentials</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                Go to "Credentials" in the left menu
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                Click "Create Credentials" → "API Key"
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                Copy your API key (keep it secure!)
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                Restrict your API key to your domain for security
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Step 3: Create Google Sheet Structure</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                Create a new Google Sheet named "March Madness 2026"
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                Create the following sheets:
+            </div>
+            <ul>
+                <li><strong>Brackets</strong> - Store user bracket data</li>
+                <li><strong>Results</strong> - Store tournament results</li>
+                <li><strong>Users</strong> - Store user information</li>
+                <li><strong>Settings</strong> - Store configuration</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>📝 Step 4: Set Up Sheet Columns</h2>
+            
+            <h3>Brackets Sheet:</h3>
+            <div class="code">A: UserName | B: Round1_Picks | C: Round2_Picks | D: Round3_Picks | E: Round4_Picks | F: Round5_Picks | G: Round6_Picks | H: Score | I: Submitted | J: Timestamp</div>
+
+            <h3>Results Sheet:</h3>
+            <div class="code">A: Round | B: MatchupID | C: Team1 | D: Team2 | E: Winner | F: Timestamp</div>
+
+            <h3>Users Sheet:</h3>
+            <div class="code">A: UserName | B: Email | C: Created | D: LastActive</div>
+        </div>
+
+        <div class="section">
+            <h2>🔗 Step 5: Get Sheet ID</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                Open your Google Sheet
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                Look at the URL: <code>https://docs.google.com/spreadsheets/d/[SHEET_ID]/edit</code>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                Copy the [SHEET_ID] part
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Step 6: Configure the Application</h2>
+            <div class="step">
+                <span class="step-number">1</span>
+                Open the bracket application
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                Enter your API key and Sheet ID when prompted
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                Test the connection
+            </div>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Security Notice:</strong> Never expose your API key in client-side code in production. Use a backend proxy or serverless function for API calls.
+        </div>
+
+        <div class="success">
+            <strong>✅ Benefits:</strong> Once set up, you'll have cloud storage, real-time collaboration, automatic backups, and easy data export!
+        </div>
+
+        <div class="section">
+            <h2>🚀 Alternative: Use Web App URL</h2>
+            <p>For easier setup without API keys, you can deploy as a Google Apps Script Web App:</p>
+            <div class="step">
+                <span class="step-number">1</span>
+                Go to <a href="https://script.google.com/" target="_blank">Google Apps Script</a>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                Create a new project and paste the provided script
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                Deploy as Web App
+            </div>
+            <div class="step">
+                <span class="step-number">4</span>
+                Use the Web App URL in your bracket application
+            </div>
+        </div>
+
+        <button class="btn" onclick="window.open('index.html', '_blank')">Open Bracket Tracker</button>
+    </div>
+</body>
+</html>

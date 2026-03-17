@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>March Madness Bracket Tracker 2026</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🏀 March Madness Bracket Tracker 2026</h1>
+            <p class="subtitle">Make your predictions and track the tournament</p>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- User Registration Section -->
+            <section id="userSection" class="user-section">
+                <div class="user-card">
+                    <h2>Welcome to March Madness 2026!</h2>
+                    <p>Enter your name to create or load your bracket</p>
+                    <div class="user-form">
+                        <input type="text" id="userName" placeholder="Enter your name" maxlength="30">
+                        <button id="startBracket" class="btn btn-primary">Start Bracket</button>
+                    </div>
+                    <div id="userError" class="error-message"></div>
+                </div>
+            </section>
+
+            <!-- Bracket Section (Initially Hidden) -->
+            <section id="bracketSection" class="bracket-section" style="display: none;">
+                <div class="user-info">
+                    <span class="current-user">Current User: <strong id="currentUser"></strong></span>
+                    <button id="switchUser" class="btn btn-secondary">Switch User</button>
+                </div>
+
+                <section class="controls">
+                    <button id="resetBtn" class="btn btn-secondary">Reset Bracket</button>
+                    <button id="saveBtn" class="btn btn-primary">Save Bracket</button>
+                    <button id="submitBtn" class="btn btn-success">Submit Final Bracket</button>
+                    <button id="configureSheets" class="btn btn-info">Configure Google Sheets</button>
+                    <button id="syncSheets" class="btn btn-warning">Sync with Sheets</button>
+                </section>
+
+            <section class="bracket-container">
+                <div class="bracket-wrapper">
+                    <!-- Round 1 -->
+                    <div class="round round-1">
+                        <h3>Round 1</h3>
+                        <div class="matchups" id="round1"></div>
+                    </div>
+
+                    <!-- Round 2 -->
+                    <div class="round round-2">
+                        <h3>Round 2</h3>
+                        <div class="matchups" id="round2"></div>
+                    </div>
+
+                    <!-- Sweet 16 -->
+                    <div class="round round-3">
+                        <h3>Sweet 16</h3>
+                        <div class="matchups" id="round3"></div>
+                    </div>
+
+                    <!-- Elite 8 -->
+                    <div class="round round-4">
+                        <h3>Elite 8</h3>
+                        <div class="matchups" id="round4"></div>
+                    </div>
+
+                    <!-- Final 4 -->
+                    <div class="round round-5">
+                        <h3>Final 4</h3>
+                        <div class="matchups" id="round5"></div>
+                    </div>
+
+                    <!-- Championship -->
+                    <div class="round round-6">
+                        <h3>Championship</h3>
+                        <div class="matchups" id="round6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="scoring">
+                <h2>Scoring & Leaderboard</h2>
+                
+                <!-- Scoring Information -->
+                <div class="scoring-info">
+                    <h3>Standard March Madness Scoring</h3>
+                    <div class="points-breakdown">
+                        <div class="point-item">
+                            <span class="round-label">Round 1 (32 games)</span>
+                            <span class="points">1 point each</span>
+                        </div>
+                        <div class="point-item">
+                            <span class="round-label">Round 2 (16 games)</span>
+                            <span class="points">2 points each</span>
+                        </div>
+                        <div class="point-item">
+                            <span class="round-label">Sweet 16 (8 games)</span>
+                            <span class="points">4 points each</span>
+                        </div>
+                        <div class="point-item">
+                            <span class="round-label">Elite 8 (4 games)</span>
+                            <span class="points">8 points each</span>
+                        </div>
+                        <div class="point-item">
+                            <span class="round-label">Final 4 (2 games)</span>
+                            <span class="points">16 points each</span>
+                        </div>
+                        <div class="point-item">
+                            <span class="round-label">Championship (1 game)</span>
+                            <span class="points">32 points each</span>
+                        </div>
+                    </div>
+                    <div class="max-points">
+                        <strong>Maximum Possible Points: 192</strong>
+                    </div>
+                </div>
+
+                <!-- User Score Summary -->
+                <div class="score-summary">
+                    <div class="score-item">
+                        <span class="label">Current Score:</span>
+                        <span id="currentScore" class="score">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="label">Possible Score:</span>
+                        <span id="possibleScore" class="score">192</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="label">Bracket Status:</span>
+                        <span id="bracketStatus" class="status">In Progress</span>
+                    </div>
+                </div>
+
+                <!-- Tournament Results -->
+                <div class="tournament-results">
+                    <h3>Tournament Results</h3>
+                    <div class="results-controls">
+                        <button id="adminMode" class="btn btn-secondary">Admin Mode</button>
+                        <button id="autoResults" class="btn btn-primary">Auto-Update Results</button>
+                        <button id="simulateResults" class="btn btn-secondary">Simulate Tournament</button>
+                        <div id="resultsStatus" class="results-status">Auto-update: Off</div>
+                        <div id="adminPanel" class="admin-panel" style="display: none;">
+                            <h4>Manual Results Entry</h4>
+                            <div class="round-selector">
+                                <select id="resultRound">
+                                    <option value="1">Round 1</option>
+                                    <option value="2">Round 2</option>
+                                    <option value="3">Sweet 16</option>
+                                    <option value="4">Elite 8</option>
+                                    <option value="5">Final 4</option>
+                                    <option value="6">Championship</option>
+                                </select>
+                                <button id="updateResults" class="btn btn-primary">Update Results</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="actualResults" class="actual-results">
+                        <p>No tournament results entered yet</p>
+                    </div>
+                </div>
+
+                <!-- Leaderboard -->
+                <div id="leaderboard" class="leaderboard">
+                    <h3>Leaderboard</h3>
+                    <div class="leaderboard-controls">
+                        <select id="sortBy">
+                            <option value="score">Sort by Score</option>
+                            <option value="name">Sort by Name</option>
+                            <option value="submitted">Sort by Submission Time</option>
+                        </select>
+                    </div>
+                    <div id="leaderboardList" class="leaderboard-list"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 March Madness Bracket Tracker</p>
+        </div>
+    </footer>
+
+    <script src="script-sheets.js"></script>
+</body>
+</html>
