@@ -2,6 +2,10 @@
 echo 🚀 Quick Auto-Push to GitHub
 echo.
 
+REM Configure Git credentials
+git config --global user.name "matthope001-hub"
+git config --global user.email "matt.hope001@gmail.com"
+
 REM Quick Git commands - no prompts
 git init 2>nul
 git add .

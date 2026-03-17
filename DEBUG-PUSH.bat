@@ -20,12 +20,18 @@ echo 📋 Step 3: Check Remote Configuration
 git remote -v
 echo.
 
-echo 📋 Step 4: Test Git Configuration
+echo 📋 Step 4: Configure Git Credentials
+git config --global user.name "matthope001-hub"
+git config --global user.email "matt.hope001@gmail.com"
+echo ✅ Git configured with correct credentials
+echo.
+
+echo 📋 Step 5: Verify Configuration
 git config --global user.name
 git config --global user.email
 echo.
 
-echo 📋 Step 5: Try Manual Push Step-by-Step
+echo 📋 Step 6: Try Manual Push Step-by-Step
 echo Initializing repository...
 git init
 
