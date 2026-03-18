@@ -878,7 +878,8 @@ function resetSchedule() {
     document.getElementById('scheduleResults').style.display = 'none';
     document.getElementById('setupSection').style.display = 'block';
     document.getElementById('scheduleBody').innerHTML = '';
-    scheduler = null;
+    // Don't set scheduler to null - keep the instance for reuse
+    currentSchedule = [];
 }
 
 function showAlert(message, type) {
