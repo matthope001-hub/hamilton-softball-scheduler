@@ -280,6 +280,13 @@ function generateSchedule() {
         scheduler = new SoftballScheduler();
         console.log('Scheduler initialized:', scheduler);
         
+        // Double-check that scheduler was created successfully
+        if (!scheduler) {
+            console.error('Failed to create scheduler instance');
+            showAlert('Error: Failed to initialize scheduler. Please refresh the page.', 'danger');
+            return;
+        }
+        
         // Check if scheduler has parseTeamNames method
         if (typeof scheduler.parseTeamNames !== 'function') {
             console.error('parseTeamNames method not found on scheduler:', scheduler);
