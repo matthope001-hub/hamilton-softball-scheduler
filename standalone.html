@@ -515,13 +515,35 @@
         let scheduler = null;
         let currentSchedule = [];
 
+        // Ensure scheduler is always available
+        function ensureScheduler() {
+            if (!scheduler) {
+                console.log('Creating new scheduler instance');
+                scheduler = new SoftballScheduler();
+            }
+            return scheduler;
+        }
+
         function generateSchedule() {
             console.log('Generate schedule button clicked');
             
             try {
-                // Initialize scheduler FIRST before using any methods
-                scheduler = new SoftballScheduler();
-                console.log('Scheduler initialized successfully:', scheduler);
+                // Check if SoftballScheduler class exists
+                if (typeof SoftballScheduler === 'undefined') {
+                    console.error('SoftballScheduler class is not defined!');
+                    showAlert('Error: Scheduler class not loaded. Please refresh the page.', 'danger');
+                    return;
+                }
+                
+                // Ensure scheduler is available
+                scheduler = ensureScheduler();
+                console.log('Scheduler ensured successfully:', scheduler);
+                
+                // Test the parseTeamNames method immediately
+                if (typeof scheduler.parseTeamNames !== 'function') {
+                    throw new Error('parseTeamNames method not found on scheduler instance');
+                }
+                console.log('parseTeamNames method verified:', typeof scheduler.parseTeamNames);
                 
                 const teamInput = document.getElementById('teamNames').value;
                 const numTeams = parseInt(document.getElementById('numTeams').value);
@@ -662,6 +684,7 @@
             document.getElementById('scheduleBody').innerHTML = '';
             // Don't set scheduler to null - keep the instance for reuse
             currentSchedule = [];
+            console.log('Schedule reset, keeping scheduler instance');
         }
 
         function showAlert(message, type) {

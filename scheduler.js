@@ -265,6 +265,15 @@ let scheduler = null;
 let currentSchedule = [];
 let editingGameIndex = null;
 
+// Ensure scheduler is always available
+function ensureScheduler() {
+    if (!scheduler) {
+        console.log('Creating new scheduler instance');
+        scheduler = new SoftballScheduler();
+    }
+    return scheduler;
+}
+
 function generateSchedule() {
     console.log('Generate schedule button clicked');
     
@@ -276,35 +285,15 @@ function generateSchedule() {
             return;
         }
         
-        // Initialize scheduler FIRST before using any methods
-        try {
-            scheduler = new SoftballScheduler();
-            console.log('Scheduler initialized successfully:', scheduler);
-            
-            // Test the parseTeamNames method immediately
-            if (typeof scheduler.parseTeamNames !== 'function') {
-                throw new Error('parseTeamNames method not found on scheduler instance');
-            }
-            console.log('parseTeamNames method verified:', typeof scheduler.parseTeamNames);
-        } catch (error) {
-            console.error('Error creating scheduler:', error);
-            showAlert('Error: Failed to create scheduler instance. Please refresh the page.', 'danger');
-            return;
-        }
+        // Ensure scheduler is available
+        scheduler = ensureScheduler();
+        console.log('Scheduler ensured successfully:', scheduler);
         
-        // Double-check that scheduler was created successfully
-        if (!scheduler) {
-            console.error('Failed to create scheduler instance');
-            showAlert('Error: Failed to initialize scheduler. Please refresh the page.', 'danger');
-            return;
-        }
-        
-        // Check if scheduler has parseTeamNames method
+        // Test the parseTeamNames method immediately
         if (typeof scheduler.parseTeamNames !== 'function') {
-            console.error('parseTeamNames method not found on scheduler:', scheduler);
-            showAlert('Error: Scheduler method not available. Please refresh the page.', 'danger');
-            return;
+            throw new Error('parseTeamNames method not found on scheduler instance');
         }
+        console.log('parseTeamNames method verified:', typeof scheduler.parseTeamNames);
         
         const teamInput = document.getElementById('teamNames').value;
         const numTeams = parseInt(document.getElementById('numTeams').value);
@@ -322,6 +311,13 @@ function generateSchedule() {
         if (!scheduler || typeof scheduler.parseTeamNames !== 'function') {
             console.error('Scheduler is null or missing parseTeamNames method:', scheduler);
             showAlert('Error: Scheduler not properly initialized. Please refresh the page.', 'danger');
+            return;
+        }
+        
+        // Double-check scheduler is still valid
+        if (!scheduler) {
+            console.error('Scheduler became null before parseTeamNames call');
+            showAlert('Error: Scheduler was reset. Please refresh the page.', 'danger');
             return;
         }
         
@@ -880,6 +876,7 @@ function resetSchedule() {
     document.getElementById('scheduleBody').innerHTML = '';
     // Don't set scheduler to null - keep the instance for reuse
     currentSchedule = [];
+    console.log('Schedule reset, keeping scheduler instance');
 }
 
 function showAlert(message, type) {
