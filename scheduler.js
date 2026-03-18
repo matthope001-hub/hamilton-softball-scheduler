@@ -268,68 +268,88 @@ let editingGameIndex = null;
 function generateSchedule() {
     console.log('Generate schedule button clicked');
     
-    // Initialize scheduler FIRST before using any methods
-    scheduler = new SoftballScheduler();
-    console.log('Scheduler initialized');
-    
-    const teamInput = document.getElementById('teamNames').value;
-    const numTeams = parseInt(document.getElementById('numTeams').value);
-    const seasonStart = document.getElementById('seasonStart').value;
-    
-    console.log('Input values:', { teamInput, numTeams, seasonStart });
-    
-    // Validate input
-    if (!teamInput || teamInput.trim().length === 0) {
-        showAlert('Please enter team names', 'warning');
-        return;
-    }
-    
-    const teamNames = scheduler.parseTeamNames(teamInput);
-    console.log('Parsed team names:', teamNames);
-    
-    if (teamNames.length < 2) {
-        showAlert('Please enter at least 2 team names', 'warning');
-        return;
-    }
-    
-    if (teamNames.length !== numTeams) {
-        showAlert(`Number of teams (${teamNames.length}) doesn't match selected option (${numTeams})`, 'warning');
-        return;
-    }
-    
-    // Show loading
-    document.getElementById('setupSection').style.display = 'none';
-    document.getElementById('loadingSpinner').style.display = 'block';
-    
-    // Generate schedule with delay for UI feedback
-    setTimeout(() => {
-        try {
-            console.log('Generating schedule...');
-            currentSchedule = scheduler.generateSchedule(teamNames, seasonStart);
-            console.log('Schedule generated:', currentSchedule.length, 'games');
-            
-            // Validate schedule
-            const issues = scheduler.validateSchedule(currentSchedule);
-            if (issues.length > 0) {
-                console.warn('Schedule validation issues:', issues);
-            }
-            
-            // Display schedule
-            displaySchedule(currentSchedule);
-            
-            // Hide loading, show results
-            document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('scheduleResults').style.display = 'block';
-            
-            showAlert(`Schedule generated successfully! ${currentSchedule.length} games scheduled.`, 'success');
-            
-        } catch (error) {
-            console.error('Error generating schedule:', error);
-            showAlert('Error generating schedule. Please try again.', 'danger');
-            document.getElementById('loadingSpinner').style.display = 'none';
-            document.getElementById('setupSection').style.display = 'block';
+    try {
+        // Check if SoftballScheduler class exists
+        if (typeof SoftballScheduler === 'undefined') {
+            console.error('SoftballScheduler class is not defined!');
+            showAlert('Error: Scheduler class not loaded. Please refresh the page.', 'danger');
+            return;
         }
-    }, 1000);
+        
+        // Initialize scheduler FIRST before using any methods
+        scheduler = new SoftballScheduler();
+        console.log('Scheduler initialized:', scheduler);
+        
+        // Check if scheduler has parseTeamNames method
+        if (typeof scheduler.parseTeamNames !== 'function') {
+            console.error('parseTeamNames method not found on scheduler:', scheduler);
+            showAlert('Error: Scheduler method not available. Please refresh the page.', 'danger');
+            return;
+        }
+        
+        const teamInput = document.getElementById('teamNames').value;
+        const numTeams = parseInt(document.getElementById('numTeams').value);
+        const seasonStart = document.getElementById('seasonStart').value;
+        
+        console.log('Input values:', { teamInput, numTeams, seasonStart });
+        
+        // Validate input
+        if (!teamInput || teamInput.trim().length === 0) {
+            showAlert('Please enter team names', 'warning');
+            return;
+        }
+        
+        const teamNames = scheduler.parseTeamNames(teamInput);
+        console.log('Parsed team names:', teamNames);
+        
+        if (teamNames.length < 2) {
+            showAlert('Please enter at least 2 team names', 'warning');
+            return;
+        }
+        
+        if (teamNames.length !== numTeams) {
+            showAlert(`Number of teams (${teamNames.length}) doesn't match selected option (${numTeams})`, 'warning');
+            return;
+        }
+        
+        // Show loading
+        document.getElementById('setupSection').style.display = 'none';
+        document.getElementById('loadingSpinner').style.display = 'block';
+        
+        // Generate schedule with delay for UI feedback
+        setTimeout(() => {
+            try {
+                console.log('Generating schedule...');
+                currentSchedule = scheduler.generateSchedule(teamNames, seasonStart);
+                console.log('Schedule generated:', currentSchedule.length, 'games');
+                
+                // Validate schedule
+                const issues = scheduler.validateSchedule(currentSchedule);
+                if (issues.length > 0) {
+                    console.warn('Schedule validation issues:', issues);
+                }
+                
+                // Display schedule
+                displaySchedule(currentSchedule);
+                
+                // Hide loading, show results
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('scheduleResults').style.display = 'block';
+                
+                showAlert(`Schedule generated successfully! ${currentSchedule.length} games scheduled.`, 'success');
+                
+            } catch (error) {
+                console.error('Error generating schedule:', error);
+                showAlert('Error generating schedule. Please try again.', 'danger');
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('setupSection').style.display = 'block';
+            }
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error in generateSchedule:', error);
+        showAlert('Error initializing scheduler. Please refresh the page.', 'danger');
+    }
 }
 
 function enterEditMode() {
