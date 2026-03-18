@@ -266,9 +266,19 @@ let currentSchedule = [];
 let editingGameIndex = null;
 
 function generateSchedule() {
+    console.log('Generate schedule button clicked');
+    
+    // Initialize scheduler if not already done
+    if (!scheduler) {
+        console.log('Initializing scheduler...');
+        scheduler = new SoftballScheduler();
+    }
+    
     const teamInput = document.getElementById('teamNames').value;
     const numTeams = parseInt(document.getElementById('numTeams').value);
     const seasonStart = document.getElementById('seasonStart').value;
+    
+    console.log('Input values:', { teamInput, numTeams, seasonStart });
     
     // Validate input
     if (!teamInput || teamInput.trim().length === 0) {
@@ -277,6 +287,8 @@ function generateSchedule() {
     }
     
     const teamNames = scheduler.parseTeamNames(teamInput);
+    console.log('Parsed team names:', teamNames);
+    
     if (teamNames.length < 2) {
         showAlert('Please enter at least 2 team names', 'warning');
         return;
@@ -294,8 +306,9 @@ function generateSchedule() {
     // Generate schedule with delay for UI feedback
     setTimeout(() => {
         try {
-            scheduler = new SoftballScheduler();
+            console.log('Generating schedule...');
             currentSchedule = scheduler.generateSchedule(teamNames, seasonStart);
+            console.log('Schedule generated:', currentSchedule.length, 'games');
             
             // Validate schedule
             const issues = scheduler.validateSchedule(currentSchedule);
