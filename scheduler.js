@@ -268,11 +268,9 @@ let editingGameIndex = null;
 function generateSchedule() {
     console.log('Generate schedule button clicked');
     
-    // Initialize scheduler if not already done
-    if (!scheduler) {
-        console.log('Initializing scheduler...');
-        scheduler = new SoftballScheduler();
-    }
+    // Initialize scheduler FIRST before using any methods
+    scheduler = new SoftballScheduler();
+    console.log('Scheduler initialized');
     
     const teamInput = document.getElementById('teamNames').value;
     const numTeams = parseInt(document.getElementById('numTeams').value);
