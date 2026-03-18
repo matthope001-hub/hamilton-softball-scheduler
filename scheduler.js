@@ -280,6 +280,12 @@ function generateSchedule() {
         try {
             scheduler = new SoftballScheduler();
             console.log('Scheduler initialized successfully:', scheduler);
+            
+            // Test the parseTeamNames method immediately
+            if (typeof scheduler.parseTeamNames !== 'function') {
+                throw new Error('parseTeamNames method not found on scheduler instance');
+            }
+            console.log('parseTeamNames method verified:', typeof scheduler.parseTeamNames);
         } catch (error) {
             console.error('Error creating scheduler:', error);
             showAlert('Error: Failed to create scheduler instance. Please refresh the page.', 'danger');
@@ -309,6 +315,13 @@ function generateSchedule() {
         // Validate input
         if (!teamInput || teamInput.trim().length === 0) {
             showAlert('Please enter team names', 'warning');
+            return;
+        }
+        
+        // Final check before using scheduler
+        if (!scheduler || typeof scheduler.parseTeamNames !== 'function') {
+            console.error('Scheduler is null or missing parseTeamNames method:', scheduler);
+            showAlert('Error: Scheduler not properly initialized. Please refresh the page.', 'danger');
             return;
         }
         
