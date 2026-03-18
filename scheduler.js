@@ -277,8 +277,14 @@ function generateSchedule() {
         }
         
         // Initialize scheduler FIRST before using any methods
-        scheduler = new SoftballScheduler();
-        console.log('Scheduler initialized:', scheduler);
+        try {
+            scheduler = new SoftballScheduler();
+            console.log('Scheduler initialized successfully:', scheduler);
+        } catch (error) {
+            console.error('Error creating scheduler:', error);
+            showAlert('Error: Failed to create scheduler instance. Please refresh the page.', 'danger');
+            return;
+        }
         
         // Double-check that scheduler was created successfully
         if (!scheduler) {
