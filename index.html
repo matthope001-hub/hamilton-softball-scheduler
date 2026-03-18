@@ -3,191 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>March Madness Bracket Tracker 2026</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Hamilton Classic Co-Ed Softball League Scheduler</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+            --dark-text: #2c3e50;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+
+        .league-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .league-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .setup-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .schedule-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .schedule-table {
+            font-size: 0.9rem;
+        }
+
+        .schedule-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 8px;
+        }
+
+        .schedule-table td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .diamond-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        .no-lights {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .game-time {
+            background: #d1f2eb;
+            border-radius: 15px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .team-home {
+            background: #e8f5e8;
+            border-radius: 5px;
+            padding: 2px 8px;
+        }
+
+        .team-away {
+            background: #ffeaa7;
+            border-radius: 5px;
+            padding: 2px 8px;
+        }
+
+        .team-home.bg-warning, .team-away.bg-warning {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .double-header {
+            background: #74b9ff;
+            border-radius: 5px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .week-header {
+            background: var(--secondary-color);
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px 5px;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .league-title {
+                font-size: 1.8rem;
+            }
+            
+            .schedule-table {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1>🏀 March Madness Bracket Tracker 2026</h1>
-            <p class="subtitle">Make your predictions and track the tournament</p>
+    <div class="container main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1 class="league-title">
+                <i class="fas fa-baseball-ball me-3"></i>
+                Hamilton Classic Co-Ed Softball League
+            </h1>
+            <p class="league-subtitle">Turner Park • Tuesday Nights • Professional Schedule Generator</p>
         </div>
-    </header>
 
-    <main class="main">
-        <div class="container">
-            <!-- User Registration Section -->
-            <section id="userSection" class="user-section">
-                <div class="user-card">
-                    <h2>Welcome to March Madness 2026!</h2>
-                    <p>Enter your name to create or load your bracket</p>
-                    <div class="user-form">
-                        <input type="text" id="userName" placeholder="Enter your name" maxlength="30">
-                        <button id="startBracket" class="btn btn-primary">Start Bracket</button>
-                    </div>
-                    <div id="userError" class="error-message"></div>
+        <!-- Setup Section -->
+        <div class="setup-card" id="setupSection">
+            <h3 class="mb-4">
+                <i class="fas fa-cog me-2"></i>
+                League Configuration
+            </h3>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Number of Teams</label>
+                    <select class="form-select" id="numTeams">
+                        <option value="9">9 Teams</option>
+                        <option value="10" selected>10 Teams</option>
+                    </select>
                 </div>
-            </section>
-
-            <!-- Bracket Section (Initially Hidden) -->
-            <section id="bracketSection" class="bracket-section" style="display: none;">
-                <div class="user-info">
-                    <span class="current-user">Current User: <strong id="currentUser"></strong></span>
-                    <button id="switchUser" class="btn btn-secondary">Switch User</button>
-                </div>
-
-                <section class="controls">
-                    <button id="resetBtn" class="btn btn-secondary">Reset Bracket</button>
-                    <button id="saveBtn" class="btn btn-primary">Save Bracket</button>
-                    <button id="submitBtn" class="btn btn-success">Submit Final Bracket</button>
-                    <button id="configureSheets" class="btn btn-info">Configure Google Sheets</button>
-                    <button id="syncSheets" class="btn btn-warning">Sync with Sheets</button>
-                </section>
-
-            <section class="bracket-container">
-                <div class="bracket-wrapper">
-                    <!-- Round 1 -->
-                    <div class="round round-1">
-                        <h3>Round 1</h3>
-                        <div class="matchups" id="round1"></div>
-                    </div>
-
-                    <!-- Round 2 -->
-                    <div class="round round-2">
-                        <h3>Round 2</h3>
-                        <div class="matchups" id="round2"></div>
-                    </div>
-
-                    <!-- Sweet 16 -->
-                    <div class="round round-3">
-                        <h3>Sweet 16</h3>
-                        <div class="matchups" id="round3"></div>
-                    </div>
-
-                    <!-- Elite 8 -->
-                    <div class="round round-4">
-                        <h3>Elite 8</h3>
-                        <div class="matchups" id="round4"></div>
-                    </div>
-
-                    <!-- Final 4 -->
-                    <div class="round round-5">
-                        <h3>Final 4</h3>
-                        <div class="matchups" id="round5"></div>
-                    </div>
-
-                    <!-- Championship -->
-                    <div class="round round-6">
-                        <h3>Championship</h3>
-                        <div class="matchups" id="round6"></div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="scoring">
-                <h2>Scoring & Leaderboard</h2>
                 
-                <!-- Scoring Information -->
-                <div class="scoring-info">
-                    <h3>Standard March Madness Scoring</h3>
-                    <div class="points-breakdown">
-                        <div class="point-item">
-                            <span class="round-label">Round 1 (32 games)</span>
-                            <span class="points">1 point each</span>
-                        </div>
-                        <div class="point-item">
-                            <span class="round-label">Round 2 (16 games)</span>
-                            <span class="points">2 points each</span>
-                        </div>
-                        <div class="point-item">
-                            <span class="round-label">Sweet 16 (8 games)</span>
-                            <span class="points">4 points each</span>
-                        </div>
-                        <div class="point-item">
-                            <span class="round-label">Elite 8 (4 games)</span>
-                            <span class="points">8 points each</span>
-                        </div>
-                        <div class="point-item">
-                            <span class="round-label">Final 4 (2 games)</span>
-                            <span class="points">16 points each</span>
-                        </div>
-                        <div class="point-item">
-                            <span class="round-label">Championship (1 game)</span>
-                            <span class="points">32 points each</span>
-                        </div>
-                    </div>
-                    <div class="max-points">
-                        <strong>Maximum Possible Points: 192</strong>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Season Start Date</label>
+                    <input type="date" class="form-control" id="seasonStart" value="2026-04-01">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Teams (comma-separated)</label>
+                    <textarea class="form-control" id="teamNames" rows="3" placeholder="Team A, Team B, Team C..."></textarea>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Diamonds Available</label>
+                    <div class="form-control bg-light">
+                        <strong>Diamond 5, 9, 12, 13, 14</strong><br>
+                        <small class="text-muted">Diamonds 13 & 14: No lights (single games only)</small>
                     </div>
                 </div>
-
-                <!-- User Score Summary -->
-                <div class="score-summary">
-                    <div class="score-item">
-                        <span class="label">Current Score:</span>
-                        <span id="currentScore" class="score">0</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="label">Possible Score:</span>
-                        <span id="possibleScore" class="score">192</span>
-                    </div>
-                    <div class="score-item">
-                        <span class="label">Bracket Status:</span>
-                        <span id="bracketStatus" class="status">In Progress</span>
-                    </div>
-                </div>
-
-                <!-- Tournament Results -->
-                <div class="tournament-results">
-                    <h3>Tournament Results</h3>
-                    <div class="results-controls">
-                        <button id="adminMode" class="btn btn-secondary">Admin Mode</button>
-                        <button id="autoResults" class="btn btn-primary">Auto-Update Results</button>
-                        <button id="simulateResults" class="btn btn-secondary">Simulate Tournament</button>
-                        <div id="resultsStatus" class="results-status">Auto-update: Off</div>
-                        <div id="adminPanel" class="admin-panel" style="display: none;">
-                            <h4>Manual Results Entry</h4>
-                            <div class="round-selector">
-                                <select id="resultRound">
-                                    <option value="1">Round 1</option>
-                                    <option value="2">Round 2</option>
-                                    <option value="3">Sweet 16</option>
-                                    <option value="4">Elite 8</option>
-                                    <option value="5">Final 4</option>
-                                    <option value="6">Championship</option>
-                                </select>
-                                <button id="updateResults" class="btn btn-primary">Update Results</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="actualResults" class="actual-results">
-                        <p>No tournament results entered yet</p>
-                    </div>
-                </div>
-
-                <!-- Leaderboard -->
-                <div id="leaderboard" class="leaderboard">
-                    <h3>Leaderboard</h3>
-                    <div class="leaderboard-controls">
-                        <select id="sortBy">
-                            <option value="score">Sort by Score</option>
-                            <option value="name">Sort by Name</option>
-                            <option value="submitted">Sort by Submission Time</option>
-                        </select>
-                    </div>
-                    <div id="leaderboardList" class="leaderboard-list"></div>
-                </div>
-            </section>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button class="btn btn-primary btn-lg" onclick="generateSchedule()">
+                    <i class="fas fa-calendar-alt me-2"></i>
+                    Generate Schedule
+                </button>
+            </div>
         </div>
-    </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 March Madness Bracket Tracker</p>
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Generating schedule...</span>
+            </div>
+            <p class="mt-3">Creating optimal schedule...</p>
         </div>
-    </footer>
 
-    <script src="script-sheets.js"></script>
+        <!-- Edit Mode Controls -->
+        <div class="schedule-container" id="editControls" style="display: none;">
+            <h3 class="mb-4">
+                <i class="fas fa-edit me-2"></i>
+                Edit Schedule
+            </h3>
+            
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Edit Mode</label>
+                    <select class="form-select" id="editMode">
+                        <option value="game">Edit Game</option>
+                        <option value="team">Edit Team</option>
+                        <option value="diamond">Edit Diamond</option>
+                        <option value="add">Add Game</option>
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <div id="editPanel" class="bg-light p-3 rounded">
+                        <!-- Dynamic edit panel will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <button class="btn btn-success me-2" onclick="saveChanges()">
+                    <i class="fas fa-save me-1"></i>
+                    Save Changes
+                </button>
+                <button class="btn btn-outline-warning me-2" onclick="cancelEdit()">
+                    <i class="fas fa-times me-1"></i>
+                    Cancel Edit
+                </button>
+            </div>
+        </div>
+
+        <!-- Schedule Results -->
+        <div class="schedule-container" id="scheduleResults" style="display: none;">
+            <h3 class="mb-4">
+                <i class="fas fa-calendar me-2"></i>
+                Generated Schedule
+            </h3>
+            
+            <div class="mb-3">
+                <button class="btn btn-outline-primary btn-sm me-2" onclick="exportSchedule()">
+                    <i class="fas fa-download me-1"></i>
+                    Export to CSV
+                </button>
+                <button class="btn btn-outline-secondary btn-sm me-2" onclick="resetSchedule()">
+                    <i class="fas fa-redo me-1"></i>
+                    Generate New Schedule
+                </button>
+                <button class="btn btn-outline-warning btn-sm me-2" onclick="enterEditMode()">
+                    <i class="fas fa-edit me-1"></i>
+                    Edit Schedule
+                </button>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped table-hover schedule-table" id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Diamond</th>
+                            <th>Home Team</th>
+                            <th>Away Team</th>
+                            <th>Game Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                        <!-- Schedule will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scheduler.js"></script>
 </body>
 </html>
