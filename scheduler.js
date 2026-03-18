@@ -267,9 +267,13 @@ let editingGameIndex = null;
 
 // Ensure scheduler is always available
 function ensureScheduler() {
+    console.log('ensureScheduler called, current scheduler:', scheduler);
     if (!scheduler) {
         console.log('Creating new scheduler instance');
         scheduler = new SoftballScheduler();
+        console.log('New scheduler created:', scheduler);
+    } else {
+        console.log('Using existing scheduler instance');
     }
     return scheduler;
 }
@@ -321,6 +325,8 @@ function generateSchedule() {
             return;
         }
         
+        console.log('About to call parseTeamNames, scheduler:', scheduler);
+        console.log('parseTeamNames method exists:', typeof scheduler.parseTeamNames);
         const teamNames = scheduler.parseTeamNames(teamInput);
         console.log('Parsed team names:', teamNames);
         
